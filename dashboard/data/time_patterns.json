@@ -1,0 +1,1041 @@
+{
+  "hourly_profile": [
+    {
+      "hour": 0,
+      "avg_energy": 86815.10362948844
+    },
+    {
+      "hour": 1,
+      "avg_energy": 10888267.029171202
+    },
+    {
+      "hour": 2,
+      "avg_energy": 8267259.674630996
+    },
+    {
+      "hour": 3,
+      "avg_energy": 6896477.985424166
+    },
+    {
+      "hour": 4,
+      "avg_energy": 73195.52011368678
+    },
+    {
+      "hour": 5,
+      "avg_energy": 6932391.910152874
+    },
+    {
+      "hour": 6,
+      "avg_energy": 5548264.00882239
+    },
+    {
+      "hour": 7,
+      "avg_energy": 6237081.538204874
+    },
+    {
+      "hour": 8,
+      "avg_energy": 11609336.700555647
+    },
+    {
+      "hour": 9,
+      "avg_energy": 15027467.859724388
+    },
+    {
+      "hour": 10,
+      "avg_energy": 3003837.2093661265
+    },
+    {
+      "hour": 11,
+      "avg_energy": 11008692.24269746
+    },
+    {
+      "hour": 12,
+      "avg_energy": 17114387.56178103
+    },
+    {
+      "hour": 13,
+      "avg_energy": 24593455.516825784
+    },
+    {
+      "hour": 14,
+      "avg_energy": 13267009.260109344
+    },
+    {
+      "hour": 15,
+      "avg_energy": 8647160.072360588
+    },
+    {
+      "hour": 16,
+      "avg_energy": 9879195.560018333
+    },
+    {
+      "hour": 17,
+      "avg_energy": 6412269.638016238
+    },
+    {
+      "hour": 18,
+      "avg_energy": 5936360.272259591
+    },
+    {
+      "hour": 19,
+      "avg_energy": 1407215.3305818995
+    },
+    {
+      "hour": 20,
+      "avg_energy": 1407166.2152820085
+    },
+    {
+      "hour": 21,
+      "avg_energy": 3805957.1041682526
+    },
+    {
+      "hour": 22,
+      "avg_energy": 6064283.373726014
+    },
+    {
+      "hour": 23,
+      "avg_energy": 4204124.62231722
+    }
+  ],
+  "dow_profile": [
+    {
+      "day_of_week": 0,
+      "avg_energy": 8508414.552734062,
+      "day_name": "Monday"
+    },
+    {
+      "day_of_week": 1,
+      "avg_energy": 8271272.795896108,
+      "day_name": "Tuesday"
+    },
+    {
+      "day_of_week": 2,
+      "avg_energy": 7191901.689747218,
+      "day_name": "Wednesday"
+    },
+    {
+      "day_of_week": 3,
+      "avg_energy": 10194567.382022526,
+      "day_name": "Thursday"
+    },
+    {
+      "day_of_week": 4,
+      "avg_energy": 4020030.5131231393,
+      "day_name": "Friday"
+    },
+    {
+      "day_of_week": 5,
+      "avg_energy": 5493277.667410197,
+      "day_name": "Saturday"
+    },
+    {
+      "day_of_week": 6,
+      "avg_energy": 11247082.722073678,
+      "day_name": "Sunday"
+    }
+  ],
+  "monthly_profile": [
+    {
+      "month": 1,
+      "total_energy": 1523259635.7635255,
+      "month_name": "Jan"
+    },
+    {
+      "month": 2,
+      "total_energy": 1518688286.0002117,
+      "month_name": "Feb"
+    },
+    {
+      "month": 3,
+      "total_energy": 2518095699.213982,
+      "month_name": "Mar"
+    },
+    {
+      "month": 4,
+      "total_energy": 2635223788.4046235,
+      "month_name": "Apr"
+    },
+    {
+      "month": 5,
+      "total_energy": 1150242984.5670016,
+      "month_name": "May"
+    },
+    {
+      "month": 6,
+      "total_energy": 3523175775.763829,
+      "month_name": "Jun"
+    },
+    {
+      "month": 7,
+      "total_energy": 2047012316.5787244,
+      "month_name": "Jul"
+    },
+    {
+      "month": 8,
+      "total_energy": 1042117820.1411328,
+      "month_name": "Aug"
+    },
+    {
+      "month": 9,
+      "total_energy": 3026419708.7029295,
+      "month_name": "Sep"
+    },
+    {
+      "month": 10,
+      "total_energy": 2538596193.8703213,
+      "month_name": "Oct"
+    },
+    {
+      "month": 11,
+      "total_energy": 32575493920.602104,
+      "month_name": "Nov"
+    },
+    {
+      "month": 12,
+      "total_energy": 14637623898.519566,
+      "month_name": "Dec"
+    }
+  ],
+  "heatmap": [
+    {
+      "day_of_week": 0,
+      "hour": 0,
+      "energy_kwh": 76622.51138415834
+    },
+    {
+      "day_of_week": 0,
+      "hour": 1,
+      "energy_kwh": 9584157.854072116
+    },
+    {
+      "day_of_week": 0,
+      "hour": 2,
+      "energy_kwh": 75132.46902902963
+    },
+    {
+      "day_of_week": 0,
+      "hour": 3,
+      "energy_kwh": 74052.27616099187
+    },
+    {
+      "day_of_week": 0,
+      "hour": 4,
+      "energy_kwh": 72950.15306831486
+    },
+    {
+      "day_of_week": 0,
+      "hour": 5,
+      "energy_kwh": 72285.82843122284
+    },
+    {
+      "day_of_week": 0,
+      "hour": 6,
+      "energy_kwh": 71695.16923711974
+    },
+    {
+      "day_of_week": 0,
+      "hour": 7,
+      "energy_kwh": 2474935.32152883
+    },
+    {
+      "day_of_week": 0,
+      "hour": 8,
+      "energy_kwh": 2474902.2056270735
+    },
+    {
+      "day_of_week": 0,
+      "hour": 9,
+      "energy_kwh": 71781.70176204843
+    },
+    {
+      "day_of_week": 0,
+      "hour": 10,
+      "energy_kwh": 9332976.805533182
+    },
+    {
+      "day_of_week": 0,
+      "hour": 11,
+      "energy_kwh": 9630962.99998391
+    },
+    {
+      "day_of_week": 0,
+      "hour": 12,
+      "energy_kwh": 58507200.41702744
+    },
+    {
+      "day_of_week": 0,
+      "hour": 13,
+      "energy_kwh": 40728722.120393775
+    },
+    {
+      "day_of_week": 0,
+      "hour": 14,
+      "energy_kwh": 30979042.348982807
+    },
+    {
+      "day_of_week": 0,
+      "hour": 15,
+      "energy_kwh": 4516481.769502497
+    },
+    {
+      "day_of_week": 0,
+      "hour": 16,
+      "energy_kwh": 4517478.34574725
+    },
+    {
+      "day_of_week": 0,
+      "hour": 17,
+      "energy_kwh": 4197887.2847126555
+    },
+    {
+      "day_of_week": 0,
+      "hour": 18,
+      "energy_kwh": 1954271.8951380625
+    },
+    {
+      "day_of_week": 0,
+      "hour": 19,
+      "energy_kwh": 1954172.6621771269
+    },
+    {
+      "day_of_week": 0,
+      "hour": 20,
+      "energy_kwh": 1985772.1605946643
+    },
+    {
+      "day_of_week": 0,
+      "hour": 21,
+      "energy_kwh": 1173412.5536849662
+    },
+    {
+      "day_of_week": 0,
+      "hour": 22,
+      "energy_kwh": 19595450.85203415
+    },
+    {
+      "day_of_week": 0,
+      "hour": 23,
+      "energy_kwh": 79601.55980406815
+    },
+    {
+      "day_of_week": 1,
+      "hour": 0,
+      "energy_kwh": 78446.14728143015
+    },
+    {
+      "day_of_week": 1,
+      "hour": 1,
+      "energy_kwh": 28891207.095014215
+    },
+    {
+      "day_of_week": 1,
+      "hour": 2,
+      "energy_kwh": 19290676.478470203
+    },
+    {
+      "day_of_week": 1,
+      "hour": 3,
+      "energy_kwh": 9737892.28006674
+    },
+    {
+      "day_of_week": 1,
+      "hour": 4,
+      "energy_kwh": 73436.75830886565
+    },
+    {
+      "day_of_week": 1,
+      "hour": 5,
+      "energy_kwh": 104482.81933192724
+    },
+    {
+      "day_of_week": 1,
+      "hour": 6,
+      "energy_kwh": 103823.83475931591
+    },
+    {
+      "day_of_week": 1,
+      "hour": 7,
+      "energy_kwh": 9702727.595945232
+    },
+    {
+      "day_of_week": 1,
+      "hour": 8,
+      "energy_kwh": 71291.88716924199
+    },
+    {
+      "day_of_week": 1,
+      "hour": 9,
+      "energy_kwh": 37984962.85045748
+    },
+    {
+      "day_of_week": 1,
+      "hour": 10,
+      "energy_kwh": 73347.0619353322
+    },
+    {
+      "day_of_week": 1,
+      "hour": 11,
+      "energy_kwh": 74923.93314133622
+    },
+    {
+      "day_of_week": 1,
+      "hour": 12,
+      "energy_kwh": 534215.1019963159
+    },
+    {
+      "day_of_week": 1,
+      "hour": 13,
+      "energy_kwh": 39904528.50855561
+    },
+    {
+      "day_of_week": 1,
+      "hour": 14,
+      "energy_kwh": 1739367.521966529
+    },
+    {
+      "day_of_week": 1,
+      "hour": 15,
+      "energy_kwh": 31756879.548826806
+    },
+    {
+      "day_of_week": 1,
+      "hour": 16,
+      "energy_kwh": 12574831.064662457
+    },
+    {
+      "day_of_week": 1,
+      "hour": 17,
+      "energy_kwh": 1741925.5867921016
+    },
+    {
+      "day_of_week": 1,
+      "hour": 18,
+      "energy_kwh": 1918540.6862644514
+    },
+    {
+      "day_of_week": 1,
+      "hour": 19,
+      "energy_kwh": 572808.7347001907
+    },
+    {
+      "day_of_week": 1,
+      "hour": 20,
+      "energy_kwh": 542097.61972984
+    },
+    {
+      "day_of_week": 1,
+      "hour": 21,
+      "energy_kwh": 539826.7520473987
+    },
+    {
+      "day_of_week": 1,
+      "hour": 22,
+      "energy_kwh": 386489.5560091256
+    },
+    {
+      "day_of_week": 1,
+      "hour": 23,
+      "energy_kwh": 111817.67807445471
+    },
+    {
+      "day_of_week": 2,
+      "hour": 0,
+      "energy_kwh": 110736.62884599606
+    },
+    {
+      "day_of_week": 2,
+      "hour": 1,
+      "energy_kwh": 77482.52156448542
+    },
+    {
+      "day_of_week": 2,
+      "hour": 2,
+      "energy_kwh": 76255.10968992
+    },
+    {
+      "day_of_week": 2,
+      "hour": 3,
+      "energy_kwh": 107062.33251380805
+    },
+    {
+      "day_of_week": 2,
+      "hour": 4,
+      "energy_kwh": 73748.54275696602
+    },
+    {
+      "day_of_week": 2,
+      "hour": 5,
+      "energy_kwh": 103173.13759093492
+    },
+    {
+      "day_of_week": 2,
+      "hour": 6,
+      "energy_kwh": 71503.42756594098
+    },
+    {
+      "day_of_week": 2,
+      "hour": 7,
+      "energy_kwh": 30600875.644301917
+    },
+    {
+      "day_of_week": 2,
+      "hour": 8,
+      "energy_kwh": 20985196.887985643
+    },
+    {
+      "day_of_week": 2,
+      "hour": 9,
+      "energy_kwh": 28205240.508853737
+    },
+    {
+      "day_of_week": 2,
+      "hour": 10,
+      "energy_kwh": 10515246.841745788
+    },
+    {
+      "day_of_week": 2,
+      "hour": 11,
+      "energy_kwh": 105826.3508349007
+    },
+    {
+      "day_of_week": 2,
+      "hour": 12,
+      "energy_kwh": 579027.9769964595
+    },
+    {
+      "day_of_week": 2,
+      "hour": 13,
+      "energy_kwh": 549363.9260854818
+    },
+    {
+      "day_of_week": 2,
+      "hour": 14,
+      "energy_kwh": 551026.3237672983
+    },
+    {
+      "day_of_week": 2,
+      "hour": 15,
+      "energy_kwh": 552308.5809214223
+    },
+    {
+      "day_of_week": 2,
+      "hour": 16,
+      "energy_kwh": 19216688.481361873
+    },
+    {
+      "day_of_week": 2,
+      "hour": 17,
+      "energy_kwh": 28696769.15433067
+    },
+    {
+      "day_of_week": 2,
+      "hour": 18,
+      "energy_kwh": 28908579.480046112
+    },
+    {
+      "day_of_week": 2,
+      "hour": 19,
+      "energy_kwh": 553818.2788487803
+    },
+    {
+      "day_of_week": 2,
+      "hour": 20,
+      "energy_kwh": 553373.2027583779
+    },
+    {
+      "day_of_week": 2,
+      "hour": 21,
+      "energy_kwh": 552488.8088974883
+    },
+    {
+      "day_of_week": 2,
+      "hour": 22,
+      "energy_kwh": 111111.6146032695
+    },
+    {
+      "day_of_week": 2,
+      "hour": 23,
+      "energy_kwh": 78657.10590811771
+    },
+    {
+      "day_of_week": 3,
+      "hour": 0,
+      "energy_kwh": 108797.7534712882
+    },
+    {
+      "day_of_week": 3,
+      "hour": 1,
+      "energy_kwh": 76128.2100527161
+    },
+    {
+      "day_of_week": 3,
+      "hour": 2,
+      "energy_kwh": 106234.57805509739
+    },
+    {
+      "day_of_week": 3,
+      "hour": 3,
+      "energy_kwh": 28165208.706724342
+    },
+    {
+      "day_of_week": 3,
+      "hour": 4,
+      "energy_kwh": 72727.90682595779
+    },
+    {
+      "day_of_week": 3,
+      "hour": 5,
+      "energy_kwh": 28997811.75471448
+    },
+    {
+      "day_of_week": 3,
+      "hour": 6,
+      "energy_kwh": 72197.11169885761
+    },
+    {
+      "day_of_week": 3,
+      "hour": 7,
+      "energy_kwh": 71676.51701233274
+    },
+    {
+      "day_of_week": 3,
+      "hour": 8,
+      "energy_kwh": 57339568.41788709
+    },
+    {
+      "day_of_week": 3,
+      "hour": 9,
+      "energy_kwh": 19241737.342287026
+    },
+    {
+      "day_of_week": 3,
+      "hour": 10,
+      "energy_kwh": 73703.86030639497
+    },
+    {
+      "day_of_week": 3,
+      "hour": 11,
+      "energy_kwh": 76952.85604196861
+    },
+    {
+      "day_of_week": 3,
+      "hour": 12,
+      "energy_kwh": 28890889.828980513
+    },
+    {
+      "day_of_week": 3,
+      "hour": 13,
+      "energy_kwh": 57474023.3291874
+    },
+    {
+      "day_of_week": 3,
+      "hour": 14,
+      "energy_kwh": 4628101.204999197
+    },
+    {
+      "day_of_week": 3,
+      "hour": 15,
+      "energy_kwh": 4632170.23338726
+    },
+    {
+      "day_of_week": 3,
+      "hour": 16,
+      "energy_kwh": 4808170.974325826
+    },
+    {
+      "day_of_week": 3,
+      "hour": 17,
+      "energy_kwh": 2075493.5829578908
+    },
+    {
+      "day_of_week": 3,
+      "hour": 18,
+      "energy_kwh": 2073775.710100879
+    },
+    {
+      "day_of_week": 3,
+      "hour": 19,
+      "energy_kwh": 2073800.837626232
+    },
+    {
+      "day_of_week": 3,
+      "hour": 20,
+      "energy_kwh": 2073122.35999145
+    },
+    {
+      "day_of_week": 3,
+      "hour": 21,
+      "energy_kwh": 1313073.086494651
+    },
+    {
+      "day_of_week": 3,
+      "hour": 22,
+      "energy_kwh": 573268.6715647662
+    },
+    {
+      "day_of_week": 3,
+      "hour": 23,
+      "energy_kwh": 82592.71375052579
+    },
+    {
+      "day_of_week": 4,
+      "hour": 0,
+      "energy_kwh": 78142.47103835334
+    },
+    {
+      "day_of_week": 4,
+      "hour": 1,
+      "energy_kwh": 76880.04821000162
+    },
+    {
+      "day_of_week": 4,
+      "hour": 2,
+      "energy_kwh": 19159126.3460797
+    },
+    {
+      "day_of_week": 4,
+      "hour": 3,
+      "energy_kwh": 74452.86586451448
+    },
+    {
+      "day_of_week": 4,
+      "hour": 4,
+      "energy_kwh": 73226.14581041747
+    },
+    {
+      "day_of_week": 4,
+      "hour": 5,
+      "energy_kwh": 137763.5833738588
+    },
+    {
+      "day_of_week": 4,
+      "hour": 6,
+      "energy_kwh": 103900.36361589313
+    },
+    {
+      "day_of_week": 4,
+      "hour": 7,
+      "energy_kwh": 71528.44900984831
+    },
+    {
+      "day_of_week": 4,
+      "hour": 8,
+      "energy_kwh": 71600.7723123989
+    },
+    {
+      "day_of_week": 4,
+      "hour": 9,
+      "energy_kwh": 72099.50884014652
+    },
+    {
+      "day_of_week": 4,
+      "hour": 10,
+      "energy_kwh": 73438.84227673283
+    },
+    {
+      "day_of_week": 4,
+      "hour": 11,
+      "energy_kwh": 74897.08119120215
+    },
+    {
+      "day_of_week": 4,
+      "hour": 12,
+      "energy_kwh": 775790.7732308193
+    },
+    {
+      "day_of_week": 4,
+      "hour": 13,
+      "energy_kwh": 2051787.1255294557
+    },
+    {
+      "day_of_week": 4,
+      "hour": 14,
+      "energy_kwh": 21156472.075910933
+    },
+    {
+      "day_of_week": 4,
+      "hour": 15,
+      "energy_kwh": 2055328.607500019
+    },
+    {
+      "day_of_week": 4,
+      "hour": 16,
+      "energy_kwh": 21536309.063665096
+    },
+    {
+      "day_of_week": 4,
+      "hour": 17,
+      "energy_kwh": 2056661.7610427155
+    },
+    {
+      "day_of_week": 4,
+      "hour": 18,
+      "energy_kwh": 2056906.524400434
+    },
+    {
+      "day_of_week": 4,
+      "hour": 19,
+      "energy_kwh": 1297754.9351669257
+    },
+    {
+      "day_of_week": 4,
+      "hour": 20,
+      "energy_kwh": 1297579.2357330704
+    },
+    {
+      "day_of_week": 4,
+      "hour": 21,
+      "energy_kwh": 20511559.36608883
+    },
+    {
+      "day_of_week": 4,
+      "hour": 22,
+      "energy_kwh": 1295770.8003476015
+    },
+    {
+      "day_of_week": 4,
+      "hour": 23,
+      "energy_kwh": 321755.56871636916
+    },
+    {
+      "day_of_week": 5,
+      "hour": 0,
+      "energy_kwh": 78306.72985109
+    },
+    {
+      "day_of_week": 5,
+      "hour": 1,
+      "energy_kwh": 77166.3505998752
+    },
+    {
+      "day_of_week": 5,
+      "hour": 2,
+      "energy_kwh": 76040.10692499728
+    },
+    {
+      "day_of_week": 5,
+      "hour": 3,
+      "energy_kwh": 9634137.464370962
+    },
+    {
+      "day_of_week": 5,
+      "hour": 4,
+      "energy_kwh": 73641.36834049769
+    },
+    {
+      "day_of_week": 5,
+      "hour": 5,
+      "energy_kwh": 19170495.789763685
+    },
+    {
+      "day_of_week": 5,
+      "hour": 6,
+      "energy_kwh": 19202241.263159785
+    },
+    {
+      "day_of_week": 5,
+      "hour": 7,
+      "energy_kwh": 71750.48391968285
+    },
+    {
+      "day_of_week": 5,
+      "hour": 8,
+      "energy_kwh": 71614.21485684227
+    },
+    {
+      "day_of_week": 5,
+      "hour": 9,
+      "energy_kwh": 71769.45277341235
+    },
+    {
+      "day_of_week": 5,
+      "hour": 10,
+      "energy_kwh": 72306.86768714205
+    },
+    {
+      "day_of_week": 5,
+      "hour": 11,
+      "energy_kwh": 19319785.20433803
+    },
+    {
+      "day_of_week": 5,
+      "hour": 12,
+      "energy_kwh": 1792575.8469918987
+    },
+    {
+      "day_of_week": 5,
+      "hour": 13,
+      "energy_kwh": 2299098.470474042
+    },
+    {
+      "day_of_week": 5,
+      "hour": 14,
+      "energy_kwh": 32120861.738594156
+    },
+    {
+      "day_of_week": 5,
+      "hour": 15,
+      "energy_kwh": 15232029.94360684
+    },
+    {
+      "day_of_week": 5,
+      "hour": 16,
+      "energy_kwh": 4380198.121908971
+    },
+    {
+      "day_of_week": 5,
+      "hour": 17,
+      "energy_kwh": 2862499.646607509
+    },
+    {
+      "day_of_week": 5,
+      "hour": 18,
+      "energy_kwh": 1378262.5050826552
+    },
+    {
+      "day_of_week": 5,
+      "hour": 19,
+      "energy_kwh": 1344806.119714645
+    },
+    {
+      "day_of_week": 5,
+      "hour": 20,
+      "energy_kwh": 1344803.9827198316
+    },
+    {
+      "day_of_week": 5,
+      "hour": 21,
+      "energy_kwh": 544328.6661085269
+    },
+    {
+      "day_of_week": 5,
+      "hour": 22,
+      "energy_kwh": 542887.269104116
+    },
+    {
+      "day_of_week": 5,
+      "hour": 23,
+      "energy_kwh": 77056.41034552861
+    },
+    {
+      "day_of_week": 6,
+      "hour": 0,
+      "energy_kwh": 76230.74026791456
+    },
+    {
+      "day_of_week": 6,
+      "hour": 1,
+      "energy_kwh": 37642772.87120651
+    },
+    {
+      "day_of_week": 6,
+      "hour": 2,
+      "energy_kwh": 19244295.4244868
+    },
+    {
+      "day_of_week": 6,
+      "hour": 3,
+      "energy_kwh": 73525.9199351094
+    },
+    {
+      "day_of_week": 6,
+      "hour": 4,
+      "energy_kwh": 72646.75824801355
+    },
+    {
+      "day_of_week": 6,
+      "hour": 5,
+      "energy_kwh": 72061.58810558086
+    },
+    {
+      "day_of_week": 6,
+      "hour": 6,
+      "energy_kwh": 19317809.21059013
+    },
+    {
+      "day_of_week": 6,
+      "hour": 7,
+      "energy_kwh": 197542.25367594245
+    },
+    {
+      "day_of_week": 6,
+      "hour": 8,
+      "energy_kwh": 70877.5144468173
+    },
+    {
+      "day_of_week": 6,
+      "hour": 9,
+      "energy_kwh": 19291264.94830592
+    },
+    {
+      "day_of_week": 6,
+      "hour": 10,
+      "energy_kwh": 741390.0008402419
+    },
+    {
+      "day_of_week": 6,
+      "hour": 11,
+      "energy_kwh": 47987167.7712713
+    },
+    {
+      "day_of_week": 6,
+      "hour": 12,
+      "energy_kwh": 29039000.67156652
+    },
+    {
+      "day_of_week": 6,
+      "hour": 13,
+      "energy_kwh": 29609051.51429971
+    },
+    {
+      "day_of_week": 6,
+      "hour": 14,
+      "energy_kwh": 1938731.7399356908
+    },
+    {
+      "day_of_week": 6,
+      "hour": 15,
+      "energy_kwh": 1940592.0437684816
+    },
+    {
+      "day_of_week": 6,
+      "hour": 16,
+      "energy_kwh": 1941125.6968925558
+    },
+    {
+      "day_of_week": 6,
+      "hour": 17,
+      "energy_kwh": 2826102.3820486935
+    },
+    {
+      "day_of_week": 6,
+      "hour": 18,
+      "energy_kwh": 2822411.6584809567
+    },
+    {
+      "day_of_week": 6,
+      "hour": 19,
+      "energy_kwh": 2069757.2276034947
+    },
+    {
+      "day_of_week": 6,
+      "hour": 20,
+      "energy_kwh": 2069834.0418415107
+    },
+    {
+      "day_of_week": 6,
+      "hour": 21,
+      "energy_kwh": 2069577.1938418841
+    },
+    {
+      "day_of_week": 6,
+      "hour": 22,
+      "energy_kwh": 20059488.924709894
+    },
+    {
+      "day_of_week": 6,
+      "hour": 23,
+      "energy_kwh": 28756727.23339857
+    }
+  ]
+}

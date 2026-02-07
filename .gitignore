@@ -1,0 +1,11 @@
+# Ignore Python virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# Ignore all Parquet files anywhere
+**/*.parquet
+
+# Ignore all CSV files anywhere
+**/*.csv

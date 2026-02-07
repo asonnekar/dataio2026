@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSU Energy Observatory | Data I/O 2026</title>
+    <meta name="description" content="Interactive energy analytics dashboard for Ohio State University">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon">⚡</div>
+            <div>
+                <div class="logo-title">OSU Energy</div>
+                <div class="logo-subtitle">Observatory</div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label">Navigation</div>
+            <a href="#overview" class="nav-item active" data-section="overview">
+                <span class="nav-icon">📊</span> Overview
+            </a>
+            <a href="#insights" class="nav-item" data-section="insights">
+                <span class="nav-icon">💡</span> Key Insights
+            </a>
+            <a href="#buildings" class="nav-item" data-section="buildings">
+                <span class="nav-icon">🏢</span> Building Analysis
+            </a>
+            <a href="#patterns" class="nav-item" data-section="patterns">
+                <span class="nav-icon">📈</span> Usage Patterns
+            </a>
+            <a href="#simulator" class="nav-item" data-section="simulator">
+                <span class="nav-icon">🤖</span> ML Simulator
+            </a>
+            <a href="#recommendations" class="nav-item" data-section="recommendations">
+                <span class="nav-icon">🎯</span> Recommendations
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="nav-label">Data I/O 2026</div>
+            <div class="sidebar-meta">Advanced Track</div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- ===== SECTION: OVERVIEW ===== -->
+        <section id="overview" class="section active">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Campus Energy Overview</h1>
+                    <p class="section-subtitle">Real-time analytics for 279 buildings across Ohio State University</p>
+                </div>
+                <div class="date-badge">Jan 2025 - Dec 2025</div>
+            </div>
+
+            <!-- Hero Stats -->
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value" id="hero-total">68.7</div>
+                    <div class="hero-stat-unit">GWh</div>
+                    <div class="hero-stat-label">Total Electricity</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value" id="hero-buildings">279</div>
+                    <div class="hero-stat-unit">buildings</div>
+                    <div class="hero-stat-label">Monitored</div>
+                </div>
+                <div class="hero-stat accent">
+                    <div class="hero-stat-value" id="hero-savings">$450K</div>
+                    <div class="hero-stat-unit">annual</div>
+                    <div class="hero-stat-label">Savings Potential</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">8.96M</div>
+                    <div class="hero-stat-unit">readings</div>
+                    <div class="hero-stat-label">Data Points</div>
+                </div>
+            </div>
+
+            <!-- Utility Breakdown -->
+            <div class="card-grid cols-4">
+                <div class="metric-card">
+                    <div class="metric-icon electricity">🔌</div>
+                    <div class="metric-value">68.7 GWh</div>
+                    <div class="metric-label">Electricity</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 100%; background: var(--accent-cyan);"></div>
+                    </div>
+                    <div class="metric-percent">48% of total</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon heat">🔥</div>
+                    <div class="metric-value">23.5 GWh</div>
+                    <div class="metric-label">Heating</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 65%; background: var(--accent-orange);"></div>
+                    </div>
+                    <div class="metric-percent">16% of total</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon cool">❄️</div>
+                    <div class="metric-value">18.2 GWh</div>
+                    <div class="metric-label">Cooling</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 52%; background: var(--accent-green);"></div>
+                    </div>
+                    <div class="metric-percent">13% of total</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon gas">⛽</div>
+                    <div class="metric-value">12.6 GWh</div>
+                    <div class="metric-label">Natural Gas</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 38%; background: var(--accent-purple);"></div>
+                    </div>
+                    <div class="metric-percent">9% of total</div>
+                </div>
+            </div>
+
+            <!-- Map + Chart Row -->
+            <div class="card-grid cols-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📍 Campus Building Map</h3>
+                        <span class="badge">Click markers for details</span>
+                    </div>
+                    <div class="map-container">
+                        <div id="campus-map"></div>
+                    </div>
+                    <div class="map-legend">
+                        <span><span class="dot cyan"></span> Low Usage</span>
+                        <span><span class="dot yellow"></span> Medium</span>
+                        <span><span class="dot orange"></span> High Usage</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📈 Monthly Consumption Trends</h3>
+                        <div class="chart-tabs">
+                            <button class="chart-tab active" data-utility="ELECTRICITY">Electricity</button>
+                            <button class="chart-tab" data-utility="HEAT">Heat</button>
+                            <button class="chart-tab" data-utility="COOLING">Cooling</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="monthly-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION: KEY INSIGHTS ===== -->
+        <section id="insights" class="section">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Key Insights</h1>
+                    <p class="section-subtitle">Critical findings from our analysis of OSU's energy consumption</p>
+                </div>
+            </div>
+
+            <!-- Insight Cards -->
+            <div class="insight-grid">
+                <div class="insight-card primary">
+                    <div class="insight-number">01</div>
+                    <h3 class="insight-title">Weather Drives 40% of Demand</h3>
+                    <p class="insight-text">Temperature-related features (CDD, HDD, apparent temperature) account for
+                        the largest share of predictable energy variation. A 10°F temperature swing can shift campus
+                        demand by 15-20%.</p>
+                    <div class="insight-metric">
+                        <span class="insight-metric-value">40%</span>
+                        <span class="insight-metric-label">Weather Attribution</span>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-number">02</div>
+                    <h3 class="insight-title">Peak Hours: 10am - 4pm Weekdays</h3>
+                    <p class="insight-text">Campus energy consumption peaks during business hours, with demand dropping
+                        45% on weekends. Night setback optimization could yield significant savings.</p>
+                    <div class="insight-metric">
+                        <span class="insight-metric-value">45%</span>
+                        <span class="insight-metric-label">Weekend Reduction</span>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-number">03</div>
+                    <h3 class="insight-title">8 Buildings Need Urgent Retrofits</h3>
+                    <p class="insight-text">Buildings constructed before 1960 show 2.3x higher EUI than modern
+                        facilities. Prioritizing these retrofits could save an estimated $450K annually.</p>
+                    <div class="insight-metric">
+                        <span class="insight-metric-value">2.3x</span>
+                        <span class="insight-metric-label">EUI Gap (Old vs New)</span>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-number">04</div>
+                    <h3 class="insight-title">Summer Cooling Spikes Critical</h3>
+                    <p class="insight-text">July-August cooling demand is 3x winter baseline. Pre-cooling strategies
+                        during off-peak hours could reduce peak costs by 18%.</p>
+                    <div class="insight-metric">
+                        <span class="insight-metric-value">3x</span>
+                        <span class="insight-metric-label">Summer vs Winter</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather Correlation Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>🌡️ Temperature vs. Energy Correlation</h3>
+                    <span class="badge">U-Shaped Curve Shows Heating & Cooling Zones</span>
+                </div>
+                <div class="chart-container" style="height: 350px;">
+                    <canvas id="weather-scatter"></canvas>
+                </div>
+                <div class="chart-annotation">
+                    <div class="annotation-item"><span class="dot orange"></span> <strong>Below 55°F:</strong> Heating
+                        dominates</div>
+                    <div class="annotation-item"><span class="dot green"></span> <strong>55-70°F:</strong> Optimal
+                        efficiency zone</div>
+                    <div class="annotation-item"><span class="dot cyan"></span> <strong>Above 70°F:</strong> Cooling
+                        ramps up</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION: BUILDING ANALYSIS ===== -->
+        <section id="buildings" class="section">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Building Analysis</h1>
+                    <p class="section-subtitle">Deep dive into individual building performance and efficiency</p>
+                </div>
+            </div>
+
+            <div class="card-grid cols-2">
+                <!-- Top Consumers -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>⚡ Top Energy Consumers</h3>
+                        <span class="badge orange">Highest Annual Usage</span>
+                    </div>
+                    <div class="building-list" id="top-consumers-list">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Retrofit Priorities -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🔧 Retrofit Priority List</h3>
+                        <span class="badge green">Action Required</span>
+                    </div>
+                    <div class="building-list" id="retrofit-list">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- EUI Distribution -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>📊 Energy Use Intensity Distribution</h3>
+                    <span class="badge">kWh per Square Foot</span>
+                </div>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="eui-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION: USAGE PATTERNS ===== -->
+        <section id="patterns" class="section">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Usage Patterns</h1>
+                    <p class="section-subtitle">Temporal analysis reveals optimizable consumption cycles</p>
+                </div>
+            </div>
+
+            <div class="card-grid cols-2">
+                <!-- Heatmap -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🔥 Weekly Usage Heatmap</h3>
+                        <span class="badge">Hour × Day Matrix</span>
+                    </div>
+                    <div id="heatmap-container" class="heatmap-grid">
+                        <!-- Generated by JS -->
+                    </div>
+                    <div class="heatmap-legend">
+                        <span>Low</span>
+                        <div class="heatmap-gradient"></div>
+                        <span>High</span>
+                    </div>
+                </div>
+
+                <!-- Hourly Profile -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>⏰ Typical Daily Profile</h3>
+                        <span class="badge">Average Hourly Load</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="hourly-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION: ML SIMULATOR ===== -->
+        <section id="simulator" class="section">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Energy Prediction Simulator</h1>
+                    <p class="section-subtitle">Explore "what-if" scenarios using our trained machine learning models
+                    </p>
+                </div>
+            </div>
+
+            <!-- Model Performance -->
+            <div class="card-grid cols-3">
+                <div class="model-card">
+                    <div class="model-icon">📈</div>
+                    <div class="model-name">Prophet</div>
+                    <div class="model-desc">Facebook's time-series forecasting</div>
+                    <div class="model-metric">
+                        <span class="model-metric-value">8.2%</span>
+                        <span class="model-metric-label">MAPE</span>
+                    </div>
+                </div>
+                <div class="model-card best">
+                    <div class="model-badge">⭐ Best</div>
+                    <div class="model-icon">🧠</div>
+                    <div class="model-name">LSTM</div>
+                    <div class="model-desc">PyTorch neural network</div>
+                    <div class="model-metric">
+                        <span class="model-metric-value">6.5%</span>
+                        <span class="model-metric-label">MAPE</span>
+                    </div>
+                </div>
+                <div class="model-card">
+                    <div class="model-icon">🌲</div>
+                    <div class="model-name">XGBoost</div>
+                    <div class="model-desc">Gradient boosted trees</div>
+                    <div class="model-metric">
+                        <span class="model-metric-value">7.1%</span>
+                        <span class="model-metric-label">MAPE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Simulator -->
+            <div class="card simulator-card">
+                <div class="card-header">
+                    <h3>🎛️ Interactive Scenario Simulator</h3>
+                    <span class="badge cyan">Adjust parameters to predict energy demand</span>
+                </div>
+
+                <div class="simulator-grid">
+                    <div class="simulator-controls">
+                        <div class="control-group">
+                            <label class="control-label">🌡️ Temperature (°F)</label>
+                            <input type="range" id="sim-temp" min="10" max="100" value="65" class="slider">
+                            <div class="slider-labels">
+                                <span>10°F</span>
+                                <span class="slider-value" id="sim-temp-val">65°F</span>
+                                <span>100°F</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">⏰ Hour of Day</label>
+                            <input type="range" id="sim-hour" min="0" max="23" value="12" class="slider">
+                            <div class="slider-labels">
+                                <span>12am</span>
+                                <span class="slider-value" id="sim-hour-val">12pm</span>
+                                <span>11pm</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">📅 Day Type</label>
+                            <div class="toggle-group">
+                                <button class="toggle active" data-value="weekday">Weekday</button>
+                                <button class="toggle" data-value="weekend">Weekend</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">🌤️ Cloud Cover</label>
+                            <input type="range" id="sim-cloud" min="0" max="100" value="30" class="slider">
+                            <div class="slider-labels">
+                                <span>Clear</span>
+                                <span class="slider-value" id="sim-cloud-val">30%</span>
+                                <span>Overcast</span>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">💧 Humidity</label>
+                            <input type="range" id="sim-humidity" min="20" max="100" value="50" class="slider">
+                            <div class="slider-labels">
+                                <span>20%</span>
+                                <span class="slider-value" id="sim-humidity-val">50%</span>
+                                <span>100%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="simulator-results">
+                        <div class="sim-prediction">
+                            <div class="sim-prediction-label">Predicted Campus Demand</div>
+                            <div class="sim-prediction-value" id="sim-result">4,250</div>
+                            <div class="sim-prediction-unit">kWh</div>
+                        </div>
+
+                        <div class="sim-breakdown">
+                            <div class="sim-breakdown-item">
+                                <span class="sim-breakdown-label">Baseline Load</span>
+                                <span class="sim-breakdown-value" id="sim-base">2,800 kWh</span>
+                            </div>
+                            <div class="sim-breakdown-item">
+                                <span class="sim-breakdown-label">Weather Impact</span>
+                                <span class="sim-breakdown-value" id="sim-weather">+850 kWh</span>
+                            </div>
+                            <div class="sim-breakdown-item">
+                                <span class="sim-breakdown-label">Time-of-Day Factor</span>
+                                <span class="sim-breakdown-value" id="sim-time">+600 kWh</span>
+                            </div>
+                        </div>
+
+                        <div class="sim-gauge">
+                            <div class="gauge-bar">
+                                <div class="gauge-fill" id="sim-gauge-fill" style="width: 65%;"></div>
+                                <div class="gauge-marker low" style="left: 30%;"></div>
+                                <div class="gauge-marker high" style="left: 80%;"></div>
+                            </div>
+                            <div class="gauge-labels">
+                                <span>Low</span>
+                                <span>Average</span>
+                                <span>Peak</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Importance -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>🎯 What Drives Energy Demand?</h3>
+                    <span class="badge">XGBoost Feature Importance</span>
+                </div>
+                <div id="feature-bars" class="feature-bars">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECTION: RECOMMENDATIONS ===== -->
+        <section id="recommendations" class="section">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Recommendations</h1>
+                    <p class="section-subtitle">Actionable strategies to improve campus energy efficiency</p>
+                </div>
+            </div>
+
+            <div class="reco-grid">
+                <div class="reco-card priority-high">
+                    <div class="reco-priority">High Priority</div>
+                    <h3 class="reco-title">Retrofit Legacy Buildings</h3>
+                    <p class="reco-text">Focus on 8 pre-1960 buildings with EUI 2.3x above average. HVAC upgrades and
+                        envelope improvements could reduce consumption by 30-40%.</p>
+                    <div class="reco-impact">
+                        <div class="reco-impact-item">
+                            <span class="reco-impact-value">$280K</span>
+                            <span class="reco-impact-label">Annual Savings</span>
+                        </div>
+                        <div class="reco-impact-item">
+                            <span class="reco-impact-value">2-3 yrs</span>
+                            <span class="reco-impact-label">Payback</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reco-card priority-high">
+                    <div class="reco-priority">High Priority</div>
+                    <h3 class="reco-title">Optimize Night Setbacks</h3>
+                    <p class="reco-text">45% demand drop on weekends shows opportunity. Extend setback periods on
+                        nights/weekends for non-critical buildings.</p>
+                    <div class="reco-impact">
+                        <div class="reco-impact-item">
+                            <span class="reco-impact-value">$95K</span>
+                            <span class="reco-impact-label">Annual Savings</span>
+                        </div>
+                        <div class="reco-impact-item">
+                            <span class="reco-impact-value">&lt;1 yr</span>
+                            <span class="reco-impact-label">Payback</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reco-card priority-medium">
+                    <div class="reco-priority">Medium Priority</div>
+                    <h3 class="reco-title">Pre-Cooling Strategy</h3>
+                    <p class="reco-text">Shift cooling loads to early morning hours during summer peaks. Take advantage
+                        of lower overnight temperatures and off-peak rates.</p>
+                    <div class="reco-impact">
+                        <div class="reco-impact-item">
+                            <span class="reco-impact-value">$45K</span>
+                            <span class="reco-impact-label">Annual Savings</span>
+                        </div>
+                        <div class="reco-impact-item">
+                            <span class="reco-impact-value">1-2 yrs</span>
+                            <span class="reco-impact-label">Payback</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reco-card priority-medium">
+                    <div class="reco-priority">Medium Priority</div>
+                    <h3 class="reco-title">Weather-Predictive Controls</h3>
+                    <p class="reco-text">Deploy ML-based predictive controls using weather forecasts. Pre-condition
+                        buildings before temperature swings to avoid peak demand.</p>
+                    <div class="reco-impact">
+                        <div class="reco-impact-item">
+                            <span class="reco-impact-value">$30K</span>
+                            <span class="reco-impact-label">Annual Savings</span>
+                        </div>
+                        <div class="reco-impact-item">
+                            <span class="reco-impact-value">2-3 yrs</span>
+                            <span class="reco-impact-label">Payback</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Impact Summary -->
+            <div class="summary-card">
+                <h3>Total Potential Impact</h3>
+                <div class="summary-stats">
+                    <div class="summary-stat">
+                        <div class="summary-stat-value">$450K</div>
+                        <div class="summary-stat-label">Annual Savings</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="summary-stat-value">15%</div>
+                        <div class="summary-stat-label">Energy Reduction</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="summary-stat-value">8,500</div>
+                        <div class="summary-stat-label">Tons CO₂ Avoided</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Dashboard JavaScript -->
+    <script src="app.js"></script>
+</body>
+
+</html>
