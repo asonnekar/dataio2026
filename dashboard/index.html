@@ -44,10 +44,10 @@
                 <span class="nav-icon">📈</span> Usage Patterns
             </a>
             <a href="#simulator" class="nav-item" data-section="simulator">
-                <span class="nav-icon">🤖</span> ML Simulator
+                <span class="nav-icon">🤖</span> Savings Forecaster
             </a>
             <a href="#recommendations" class="nav-item" data-section="recommendations">
-                <span class="nav-icon">🎯</span> Recommendations
+                <span class="nav-icon">🎯</span> Solution Blueprint
             </a>
         </div>
 
@@ -72,7 +72,7 @@
                     <h1 class="section-title">Campus Energy Overview</h1>
                     <p class="section-subtitle">Real-time analytics for 279 buildings across Ohio State University</p>
                 </div>
-                <div class="date-badge">Jan 2025 - Dec 2025</div>
+                <div class="date-badge" id="overview-date">Jan 2025 - Dec 2025</div>
             </div>
 
             <!-- Hero Stats -->
@@ -145,7 +145,7 @@
             <div class="section-header">
                 <div>
                     <h1 class="section-title">Key Insights</h1>
-                    <p class="section-subtitle">Critical findings from our analysis of OSU's energy consumption</p>
+                    <p class="section-subtitle">The core findings that power the Savings Forecaster and the Solution Blueprint.</p>
                 </div>
             </div>
 
@@ -153,46 +153,45 @@
             <div class="insight-grid">
                 <div class="insight-card primary">
                     <div class="insight-number">01</div>
-                    <h3 class="insight-title">Weather Drives 40% of Demand</h3>
-                    <p class="insight-text">Temperature-related features (CDD, HDD, apparent temperature) account for
-                        the largest share of predictable energy variation. A 10°F temperature swing can shift campus
-                        demand by 15-20%.</p>
+                    <h3 class="insight-title">Scheduling + Setpoints Are the Fastest Win</h3>
+                    <p class="insight-text">Off-hour load is consistently elevated, especially nights and weekends.
+                        Aligning BAS schedules to occupancy patterns drives immediate savings with low capex.</p>
                     <div class="insight-metric">
-                        <span class="insight-metric-value">40%</span>
-                        <span class="insight-metric-label">Weather Attribution</span>
+                        <span class="insight-metric-value" id="insight-schedule-range">--</span>
+                        <span class="insight-metric-label">Energy Reduction Range</span>
                     </div>
                 </div>
 
                 <div class="insight-card">
                     <div class="insight-number">02</div>
-                    <h3 class="insight-title">Peak Hours: 10am - 4pm Weekdays</h3>
-                    <p class="insight-text">Campus energy consumption peaks during business hours, with demand dropping
-                        45% on weekends. Night setback optimization could yield significant savings.</p>
+                    <h3 class="insight-title">Weather Sensitivity Enables ML Control</h3>
+                    <p class="insight-text">Temperature and humidity consistently rank among top model drivers, making
+                        predictive preconditioning effective for peak avoidance.</p>
                     <div class="insight-metric">
-                        <span class="insight-metric-value">45%</span>
-                        <span class="insight-metric-label">Weekend Reduction</span>
+                        <span class="insight-metric-value" id="insight-ml-range">--</span>
+                        <span class="insight-metric-label">Energy Reduction Range</span>
                     </div>
                 </div>
 
                 <div class="insight-card">
                     <div class="insight-number">03</div>
-                    <h3 class="insight-title">8 Buildings Need Urgent Retrofits</h3>
-                    <p class="insight-text">Buildings constructed before 1960 show 2.3x higher EUI than modern
-                        facilities. Prioritizing these retrofits could save an estimated $450K annually.</p>
+                    <h3 class="insight-title">Peak Demand Is Concentrated in 9am-5pm</h3>
+                    <p class="insight-text">Campus demand spikes during business hours, amplifying cost exposure.
+                        Predictive HVAC trims peaks without sacrificing comfort.</p>
                     <div class="insight-metric">
-                        <span class="insight-metric-value">2.3x</span>
-                        <span class="insight-metric-label">EUI Gap (Old vs New)</span>
+                        <span class="insight-metric-value" id="insight-peak-reduction">--</span>
+                        <span class="insight-metric-label">Peak Reduction Potential</span>
                     </div>
                 </div>
 
                 <div class="insight-card">
                     <div class="insight-number">04</div>
-                    <h3 class="insight-title">Summer Cooling Spikes Critical</h3>
-                    <p class="insight-text">July-August cooling demand is 3x winter baseline. Pre-cooling strategies
-                        during off-peak hours could reduce peak costs by 18%.</p>
+                    <h3 class="insight-title">A Small Set of Buildings Drive Impact</h3>
+                    <p class="insight-text">Top consumers and legacy buildings deliver the fastest payback. These are
+                        the priority pilots for both scheduling and predictive HVAC.</p>
                     <div class="insight-metric">
-                        <span class="insight-metric-value">3x</span>
-                        <span class="insight-metric-label">Summer vs Winter</span>
+                        <span class="insight-metric-value" id="insight-pilot-count">--</span>
+                        <span class="insight-metric-label">Pilot Candidates</span>
                     </div>
                 </div>
             </div>
@@ -200,8 +199,8 @@
             <!-- Weather Correlation Chart -->
             <div class="card">
                 <div class="card-header">
-                    <h3>🌡️ Temperature vs. Energy Correlation</h3>
-                    <span class="badge">U-Shaped Curve Shows Heating & Cooling Zones</span>
+                    <h3>🌡️ Weather Sensitivity for ML Control</h3>
+                    <span class="badge">U-shaped response powers predictive HVAC</span>
                 </div>
                 <div class="chart-container" style="height: 350px;">
                     <canvas id="weather-scatter"></canvas>
@@ -304,115 +303,147 @@
         <section id="simulator" class="section">
             <div class="section-header">
                 <div>
-                    <h1 class="section-title">Energy Prediction Simulator</h1>
-                    <p class="section-subtitle">Explore "what-if" scenarios using our trained machine learning models
-                    </p>
+                    <h1 class="section-title">Savings Forecaster</h1>
+                    <p class="section-subtitle">Campus-wide forecast of how DataIO optimization reduces energy, cost, and emissions. Switch to a building for local impact.</p>
+                </div>
+                <div class="section-actions">
+                    <span class="badge green">Campus-wide</span>
+                    <span class="badge">ML-driven</span>
                 </div>
             </div>
 
-            <!-- Model Performance -->
-            <div class="card-grid cols-3">
-                <div class="model-card">
-                    <div class="model-icon">📈</div>
-                    <div class="model-name">Prophet</div>
-                    <div class="model-desc">Facebook's time-series forecasting</div>
-                    <div class="model-metric">
-                        <span class="model-metric-value">8.2%</span>
-                        <span class="model-metric-label">MAPE</span>
+            <div class="sim-hero-grid">
+                <div class="card sim-impact-card">
+                    <div class="card-header">
+                        <h3>Projected annual impact</h3>
+                        <span class="badge green" id="sim-scenario-badge">Recommended scenario</span>
+                    </div>
+                    <div class="sim-impact-grid">
+                        <div class="impact-metric">
+                            <div class="impact-label">Energy saved</div>
+                            <div class="impact-value" id="sim-savings-kwh">--</div>
+                            <div class="impact-sub">kWh per year</div>
+                        </div>
+                        <div class="impact-metric">
+                            <div class="impact-label">Cost avoided</div>
+                            <div class="impact-value" id="sim-savings-dollar">--</div>
+                            <div class="impact-sub">annual utility savings</div>
+                        </div>
+                        <div class="impact-metric">
+                            <div class="impact-label">CO2 avoided</div>
+                            <div class="impact-value" id="sim-savings-co2">--</div>
+                            <div class="impact-sub">tons per year</div>
+                        </div>
+                        <div class="impact-metric">
+                            <div class="impact-label">Peak reduction</div>
+                            <div class="impact-value" id="sim-peak-reduction">--</div>
+                            <div class="impact-sub" id="sim-peak-kw">--</div>
+                        </div>
+                    </div>
+                    <div class="sim-impact-foot">
+                        <span id="sim-focus-label">Campus-wide baseline</span>
+                        <span class="impact-divider">|</span>
+                        <span>Assumes $0.12/kWh and 0.0004 tCO2/kWh</span>
                     </div>
                 </div>
-                <div class="model-card best">
-                    <div class="model-badge">⭐ Best</div>
-                    <div class="model-icon">🧠</div>
-                    <div class="model-name">LSTM</div>
-                    <div class="model-desc">PyTorch neural network</div>
-                    <div class="model-metric">
-                        <span class="model-metric-value">6.5%</span>
-                        <span class="model-metric-label">MAPE</span>
+
+                <div class="card sim-forecast-card">
+                    <div class="card-header">
+                        <h3>12-month forecast</h3>
+                        <span class="badge">Baseline vs Optimized</span>
                     </div>
-                </div>
-                <div class="model-card">
-                    <div class="model-icon">🌲</div>
-                    <div class="model-name">XGBoost</div>
-                    <div class="model-desc">Gradient boosted trees</div>
-                    <div class="model-metric">
-                        <span class="model-metric-value">7.1%</span>
-                        <span class="model-metric-label">MAPE</span>
+                    <div class="forecast-chart">
+                        <canvas id="sim-forecast-chart"></canvas>
+                    </div>
+                    <div class="forecast-legend">
+                        <div><span class="legend-dot baseline"></span>Baseline</div>
+                        <div><span class="legend-dot optimized"></span>Optimized</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Interactive Simulator -->
             <div class="card simulator-card">
                 <div class="card-header">
-                    <h3>🎛️ Interactive Scenario Simulator</h3>
-                    <span class="badge cyan">Adjust parameters to predict energy demand</span>
+                    <h3>Scenario Builder</h3>
+                    <span class="badge cyan">Adjust solution coverage and depth</span>
                 </div>
 
-                <div class="simulator-grid">
+                <div class="simulator-grid sim-lab-grid">
                     <div class="simulator-controls">
                         <div class="control-group">
-                            <label class="control-label">🌡️ Temperature (°F)</label>
-                            <input type="range" id="sim-temp" min="10" max="100" value="65" class="slider">
-                            <div class="slider-labels">
-                                <span>10°F</span>
-                                <span class="slider-value" id="sim-temp-val">65°F</span>
-                                <span>100°F</span>
-                            </div>
+                            <label class="control-label">Focus area</label>
+                            <select id="sim-focus" class="select">
+                                <option value="campus">Campus-wide (279 buildings)</option>
+                            </select>
+                            <div class="control-help">Switch to a building to see local impact and pilot priorities.</div>
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label">⏰ Hour of Day</label>
-                            <input type="range" id="sim-hour" min="0" max="23" value="12" class="slider">
+                            <div class="control-title">Solution 1: Smart Scheduling + Setpoint Optimization</div>
+                            <p class="control-text">Align HVAC runtimes to occupancy patterns and extend night/weekend setbacks where we see idle load.</p>
+                            <input type="range" id="sim-schedule" min="0" max="100" value="60" class="slider">
                             <div class="slider-labels">
-                                <span>12am</span>
-                                <span class="slider-value" id="sim-hour-val">12pm</span>
-                                <span>11pm</span>
+                                <span>Baseline</span>
+                                <span class="slider-value" id="sim-schedule-val">60%</span>
+                                <span>Max</span>
                             </div>
+                            <div class="control-micro">Target buildings: <span id="sim-schedule-buildings">--</span></div>
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label">📅 Day Type</label>
+                            <div class="control-title">Solution 2: ML Predictive HVAC Control</div>
+                            <p class="control-text">Use weather and occupancy forecasts to precondition before peaks and avoid demand spikes.</p>
+                            <input type="range" id="sim-ml" min="0" max="100" value="45" class="slider">
+                            <div class="slider-labels">
+                                <span>Limited</span>
+                                <span class="slider-value" id="sim-ml-val">45%</span>
+                                <span>Full</span>
+                            </div>
+                            <div class="control-micro">Coverage: <span id="sim-ml-coverage">45%</span> of eligible space</div>
+                        </div>
+
+                        <div class="control-group preset-group">
+                            <div class="control-title">Scenario presets</div>
                             <div class="toggle-group">
-                                <button class="toggle active" data-value="weekday">Weekday</button>
-                                <button class="toggle" data-value="weekend">Weekend</button>
+                                <button class="toggle preset active" data-preset="recommended">Recommended</button>
+                                <button class="toggle preset" data-preset="conservative">Conservative</button>
+                                <button class="toggle preset" data-preset="aggressive">Aggressive</button>
                             </div>
                         </div>
                     </div>
 
                     <div class="simulator-results">
-                        <div class="sim-prediction">
-                            <div class="sim-prediction-label">Predicted Campus Demand</div>
-                            <div class="sim-prediction-value" id="sim-result">4,250</div>
-                            <div class="sim-prediction-unit">kWh</div>
-                        </div>
-
-                        <div class="sim-breakdown">
-                            <div class="sim-breakdown-item">
-                                <span class="sim-breakdown-label">Baseline Load</span>
-                                <span class="sim-breakdown-value" id="sim-base">2,800 kWh</span>
+                        <div class="sim-breakdown-card">
+                            <div class="sim-breakdown-title">Savings breakdown</div>
+                            <div class="breakdown-row">
+                                <span>Scheduling + Setpoints</span>
+                                <span id="sim-breakdown-schedule">--</span>
                             </div>
-                            <div class="sim-breakdown-item">
-                                <span class="sim-breakdown-label">Weather Impact</span>
-                                <span class="sim-breakdown-value" id="sim-weather">+850 kWh</span>
+                            <div class="breakdown-row">
+                                <span>Predictive HVAC</span>
+                                <span id="sim-breakdown-ml">--</span>
                             </div>
-                            <div class="sim-breakdown-item">
-                                <span class="sim-breakdown-label">Time-of-Day Factor</span>
-                                <span class="sim-breakdown-value" id="sim-time">+600 kWh</span>
+                            <div class="breakdown-row total">
+                                <span>Total reduction</span>
+                                <span id="sim-breakdown-total">--</span>
+                            </div>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-fill" id="sim-breakdown-bar" style="width: 0%;"></div>
                             </div>
                         </div>
 
-                        <div class="sim-gauge">
-                            <div class="gauge-bar">
-                                <div class="gauge-fill" id="sim-gauge-fill" style="width: 65%;"></div>
-                                <div class="gauge-marker low" style="left: 30%;"></div>
-                                <div class="gauge-marker high" style="left: 80%;"></div>
-                            </div>
-                            <div class="gauge-labels">
-                                <span>Low</span>
-                                <span>Average</span>
-                                <span>Peak</span>
-                            </div>
+                        <div class="sim-solution-detail">
+                            <h4>Why it works</h4>
+                            <ul>
+                                <li>Weekend and off-hour demand shows consistent idle capacity.</li>
+                                <li>Peak usage concentrates in 9am-5pm windows across most building types.</li>
+                                <li>Weather sensitivity ranks among the top ML drivers of load.</li>
+                            </ul>
+                        </div>
+
+                        <div class="sim-highlight">
+                            <div class="sim-highlight-title">Priority buildings to pilot</div>
+                            <div class="sim-building-list" id="sim-building-list"></div>
                         </div>
                     </div>
                 </div>
@@ -421,7 +452,7 @@
             <!-- Feature Importance -->
             <div class="card">
                 <div class="card-header">
-                    <h3>🎯 What Drives Energy Demand?</h3>
+                    <h3>ML drivers behind the forecast</h3>
                     <span class="badge">XGBoost Feature Importance</span>
                 </div>
                 <div id="feature-bars" class="feature-bars">
@@ -434,76 +465,108 @@
         <section id="recommendations" class="section">
             <div class="section-header">
                 <div>
-                    <h1 class="section-title">Recommendations</h1>
-                    <p class="section-subtitle">Actionable strategies to improve campus energy efficiency</p>
+                    <h1 class="section-title">Solution Blueprint</h1>
+                    <p class="section-subtitle">Two deep initiatives that tie together insights, ML forecasting, and operational execution.</p>
+                </div>
+                <div class="section-actions">
+                    <span class="badge green">Campus-wide</span>
+                    <span class="badge">Implementation-ready</span>
                 </div>
             </div>
 
-            <div class="reco-grid">
-                <div class="reco-card priority-high">
-                    <div class="reco-priority">High Priority</div>
-                    <h3 class="reco-title">Retrofit Legacy Buildings</h3>
-                    <p class="reco-text">Focus on 8 pre-1960 buildings with EUI 2.3x above average. HVAC upgrades and
-                        envelope improvements could reduce consumption by 30-40%.</p>
-                    <div class="reco-impact">
+            <div class="reco-focus-grid">
+                <div class="reco-focus-card primary">
+                    <div class="reco-focus-eyebrow">Solution 1 - Operations</div>
+                    <h3 class="reco-focus-title">Smart Scheduling + Setpoint Optimization</h3>
+                    <p class="reco-focus-text">Standardize BAS schedules, tighten night/weekend setbacks, and align runtimes to occupancy curves. Focus on legacy buildings and large consumers first.</p>
+                    <div class="reco-impact-grid">
                         <div class="reco-impact-item">
-                            <span class="reco-impact-value">$280K</span>
-                            <span class="reco-impact-label">Annual Savings</span>
+                            <div class="reco-impact-value">8-12%</div>
+                            <div class="reco-impact-label">Energy reduction</div>
                         </div>
                         <div class="reco-impact-item">
-                            <span class="reco-impact-value">2-3 yrs</span>
-                            <span class="reco-impact-label">Payback</span>
+                            <div class="reco-impact-value">0-6 months</div>
+                            <div class="reco-impact-label">Time to value</div>
+                        </div>
+                        <div class="reco-impact-item">
+                            <div class="reco-impact-value">Low capex</div>
+                            <div class="reco-impact-label">Implementation lift</div>
+                        </div>
+                    </div>
+                    <div class="reco-pill-group" id="reco-schedule-buildings"></div>
+                    <div class="reco-steps">
+                        <div class="reco-step"><span>1</span> Audit schedules and BAS overrides</div>
+                        <div class="reco-step"><span>2</span> Align start/stop to observed occupancy</div>
+                        <div class="reco-step"><span>3</span> Lock in setbacks and monitor drift</div>
+                    </div>
+                </div>
+
+                <div class="reco-focus-card">
+                    <div class="reco-focus-eyebrow">Solution 2 - ML Control</div>
+                    <h3 class="reco-focus-title">Predictive HVAC + Weather Preconditioning</h3>
+                    <p class="reco-focus-text">Use our forecasting model to precondition buildings before temperature swings and avoid peak demand spikes. Prioritize high-load facilities and labs.</p>
+                    <div class="reco-impact-grid">
+                        <div class="reco-impact-item">
+                            <div class="reco-impact-value">5-8%</div>
+                            <div class="reco-impact-label">Energy reduction</div>
+                        </div>
+                        <div class="reco-impact-item">
+                            <div class="reco-impact-value">6-12 months</div>
+                            <div class="reco-impact-label">Time to value</div>
+                        </div>
+                        <div class="reco-impact-item">
+                            <div class="reco-impact-value">Med capex</div>
+                            <div class="reco-impact-label">Implementation lift</div>
+                        </div>
+                    </div>
+                    <div class="reco-pill-group" id="reco-ml-buildings"></div>
+                    <div class="reco-steps">
+                        <div class="reco-step"><span>1</span> Deploy forecasting to BAS control layer</div>
+                        <div class="reco-step"><span>2</span> Train adaptive preconditioning curves</div>
+                        <div class="reco-step"><span>3</span> Validate peak reduction and comfort</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reco-execution-grid">
+                <div class="card reco-roadmap">
+                    <div class="card-header">
+                        <h3>Execution roadmap</h3>
+                        <span class="badge">90-day sprint</span>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-title">Weeks 1-2: Data readiness</div>
+                            <div class="timeline-text">Validate BAS schedules, gather meter baselines, confirm occupancy calendars.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-title">Weeks 3-6: Controls tuning</div>
+                            <div class="timeline-text">Roll out schedule and setpoint adjustments to pilot buildings, track deltas.</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-title">Weeks 7-12: ML expansion</div>
+                            <div class="timeline-text">Activate predictive HVAC controls, scale to additional buildings, verify savings.</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="reco-card priority-high">
-                    <div class="reco-priority">High Priority</div>
-                    <h3 class="reco-title">Optimize Night Setbacks</h3>
-                    <p class="reco-text">45% demand drop on weekends shows opportunity. Extend setback periods on
-                        nights/weekends for non-critical buildings.</p>
-                    <div class="reco-impact">
-                        <div class="reco-impact-item">
-                            <span class="reco-impact-value">$95K</span>
-                            <span class="reco-impact-label">Annual Savings</span>
-                        </div>
-                        <div class="reco-impact-item">
-                            <span class="reco-impact-value">&lt;1 yr</span>
-                            <span class="reco-impact-label">Payback</span>
-                        </div>
+                <div class="card reco-measurement">
+                    <div class="card-header">
+                        <h3>Measurement plan</h3>
+                        <span class="badge cyan">Verify savings</span>
                     </div>
-                </div>
-
-                <div class="reco-card priority-medium">
-                    <div class="reco-priority">Medium Priority</div>
-                    <h3 class="reco-title">Pre-Cooling Strategy</h3>
-                    <p class="reco-text">Shift cooling loads to early morning hours during summer peaks. Take advantage
-                        of lower overnight temperatures and off-peak rates.</p>
-                    <div class="reco-impact">
-                        <div class="reco-impact-item">
-                            <span class="reco-impact-value">$45K</span>
-                            <span class="reco-impact-label">Annual Savings</span>
+                    <div class="metric-stack">
+                        <div class="metric-item">
+                            <div class="metric-label">Normalization</div>
+                            <div class="metric-value">Weather and occupancy adjusted baselines</div>
                         </div>
-                        <div class="reco-impact-item">
-                            <span class="reco-impact-value">1-2 yrs</span>
-                            <span class="reco-impact-label">Payback</span>
+                        <div class="metric-item">
+                            <div class="metric-label">Verification</div>
+                            <div class="metric-value">Monthly savings vs rolling baseline</div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="reco-card priority-medium">
-                    <div class="reco-priority">Medium Priority</div>
-                    <h3 class="reco-title">Weather-Predictive Controls</h3>
-                    <p class="reco-text">Deploy ML-based predictive controls using weather forecasts. Pre-condition
-                        buildings before temperature swings to avoid peak demand.</p>
-                    <div class="reco-impact">
-                        <div class="reco-impact-item">
-                            <span class="reco-impact-value">$30K</span>
-                            <span class="reco-impact-label">Annual Savings</span>
-                        </div>
-                        <div class="reco-impact-item">
-                            <span class="reco-impact-value">2-3 yrs</span>
-                            <span class="reco-impact-label">Payback</span>
+                        <div class="metric-item">
+                            <div class="metric-label">Comfort guardrails</div>
+                            <div class="metric-value">Temperature and IAQ thresholds</div>
                         </div>
                     </div>
                 </div>
@@ -511,21 +574,22 @@
 
             <!-- Total Impact Summary -->
             <div class="summary-card">
-                <h3>Total Potential Impact</h3>
+                <h3>Campus impact at recommended scenario</h3>
                 <div class="summary-stats">
                     <div class="summary-stat">
-                        <div class="summary-stat-value">$450K</div>
+                        <div class="summary-stat-value" id="reco-total-savings">$450K</div>
                         <div class="summary-stat-label">Annual Savings</div>
                     </div>
                     <div class="summary-stat">
-                        <div class="summary-stat-value">15%</div>
+                        <div class="summary-stat-value" id="reco-total-reduction">15%</div>
                         <div class="summary-stat-label">Energy Reduction</div>
                     </div>
                     <div class="summary-stat">
-                        <div class="summary-stat-value">8,500</div>
-                        <div class="summary-stat-label">Tons CO₂ Avoided</div>
+                        <div class="summary-stat-value" id="reco-total-co2">8,500</div>
+                        <div class="summary-stat-label">Tons CO2 Avoided</div>
                     </div>
                 </div>
+                <div class="summary-foot">Updated from the simulator above.</div>
             </div>
         </section>
 

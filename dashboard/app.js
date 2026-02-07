@@ -13,6 +13,8 @@ let monthlyChart = null;
 let hourlyChart = null;
 let weatherChart = null;
 let euiChart = null;
+let simulatorChart = null;
+let simulatorFocusBuildings = [];
 
 // ============================================================
 // INITIALIZATION
@@ -36,6 +38,12 @@ async function loadDashboardData() {
   initializeAllCharts();
   renderBuildingLists();
   renderFeatureImportance();
+  renderRecommendationTargets();
+  populateSimulatorFocusOptions(true);
+  renderSimulatorPriorityBuildings();
+  updateOverviewStats();
+  updateInsights();
+  updateSimulation();
 }
 
 // ============================================================
@@ -72,6 +80,12 @@ function setupNavigation() {
       }
       if (sectionId === 'buildings' && !euiChart) {
         setTimeout(initEUIChart, 100);
+      }
+      if (sectionId === 'simulator') {
+        setTimeout(() => {
+          if (simulatorChart) simulatorChart.resize();
+          updateSimulation();
+        }, 100);
       }
     });
   });
@@ -1088,94 +1102,384 @@ function renderFeatureImportance() {
 // ML SIMULATOR
 // ============================================================
 
+const simulatorPresets = {
+  conservative: { schedule: 35, ml: 25 },
+  recommended: { schedule: 60, ml: 45 },
+  aggressive: { schedule: 85, ml: 70 }
+};
+
+const simulatorAssumptions = {
+  scheduleMinPct: 0.08,
+  scheduleMaxPct: 0.12,
+  mlMinPct: 0.05,
+  mlMaxPct: 0.08,
+  peakReductionFactor: 0.7
+};
+
 function setupSimulator() {
-  // Slider event listeners
-  ['temp', 'hour', 'cloud', 'humidity'].forEach(id => {
-    const slider = document.getElementById(`sim-${id}`);
-    if (slider) {
-      slider.addEventListener('input', updateSimulation);
-    }
-  });
-  
-  // Toggle buttons
-  document.querySelectorAll('.toggle').forEach(toggle => {
-    toggle.addEventListener('click', () => {
-      document.querySelectorAll('.toggle').forEach(t => t.classList.remove('active'));
-      toggle.classList.add('active');
+  const scheduleSlider = document.getElementById('sim-schedule');
+  const mlSlider = document.getElementById('sim-ml');
+  const focusSelect = document.getElementById('sim-focus');
+
+  if (scheduleSlider) scheduleSlider.addEventListener('input', updateSimulation);
+  if (mlSlider) mlSlider.addEventListener('input', updateSimulation);
+  if (focusSelect) focusSelect.addEventListener('change', updateSimulation);
+
+  const presetButtons = document.querySelectorAll('.toggle.preset');
+  presetButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      presetButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      applySimulatorPreset(button.dataset.preset);
       updateSimulation();
     });
   });
-  
-  // Initial calculation
+
   updateSimulation();
 }
 
 function updateSimulation() {
-  const temp = parseInt(document.getElementById('sim-temp')?.value || 65);
-  const hour = parseInt(document.getElementById('sim-hour')?.value || 12);
-  const cloud = parseInt(document.getElementById('sim-cloud')?.value || 30);
-  const humidity = parseInt(document.getElementById('sim-humidity')?.value || 50);
-  const isWeekend = document.querySelector('.toggle.active')?.dataset.value === 'weekend';
-  
-  // Update display values
-  document.getElementById('sim-temp-val').textContent = `${temp}°F`;
-  document.getElementById('sim-hour-val').textContent = formatHour(hour);
-  document.getElementById('sim-cloud-val').textContent = `${cloud}%`;
-  document.getElementById('sim-humidity-val').textContent = `${humidity}%`;
-  
-  // Calculate prediction using simplified model
-  let baseLoad = 2800;
-  
-  // Weekend/weekday factor
-  if (isWeekend) baseLoad *= 0.55;
-  
-  // Temperature impact (U-shaped curve)
-  let weatherImpact = 0;
-  if (temp < 55) {
-    weatherImpact = (55 - temp) * 35; // Heating
-  } else if (temp > 70) {
-    weatherImpact = (temp - 70) * 40; // Cooling
-  }
-  
-  // Humidity adds to cooling load
-  if (temp > 70) {
-    weatherImpact += (humidity - 50) * 8;
-  }
-  
-  // Cloud cover reduces solar gain (less cooling in summer)
-  if (temp > 70) {
-    weatherImpact -= cloud * 3;
-  }
-  
-  // Time of day factor
-  let timeImpact = 0;
-  if (!isWeekend) {
-    if (hour >= 9 && hour <= 17) {
-      timeImpact = 800 + Math.sin((hour - 9) / 8 * Math.PI) * 400;
-    } else {
-      timeImpact = Math.sin((hour - 6) / 24 * Math.PI * 2) * 300;
+  const data = getSimulationData();
+  populateSimulatorFocusOptions();
+
+  const scheduleSlider = document.getElementById('sim-schedule');
+  const mlSlider = document.getElementById('sim-ml');
+  const focusSelect = document.getElementById('sim-focus');
+
+  const scheduleVal = parseInt(scheduleSlider?.value || 0, 10);
+  const mlVal = parseInt(mlSlider?.value || 0, 10);
+  const focusValue = focusSelect?.value || 'campus';
+  const scenarioBadge = document.getElementById('sim-scenario-badge');
+
+  const maxSchedulePct = simulatorAssumptions.scheduleMaxPct;
+  const maxMlPct = simulatorAssumptions.mlMaxPct;
+
+  const schedulePct = (scheduleVal / 100) * maxSchedulePct;
+  const mlPct = (mlVal / 100) * maxMlPct;
+  const overlap = Math.min(schedulePct, mlPct) * 0.3;
+  const totalPct = Math.min(0.25, schedulePct + mlPct - overlap);
+
+  const totalGwh = normalizeTotalGwh(data.summary?.total_electricity_mwh || 68732.9);
+  const campusBaselineKwh = totalGwh ? totalGwh * 1000000 : 68732.9 * 1000;
+  let baselineKwh = campusBaselineKwh;
+  let focusLabel = 'Campus-wide baseline';
+
+  if (focusValue.startsWith('building-')) {
+    const index = parseInt(focusValue.split('-')[1], 10);
+    const building = simulatorFocusBuildings[index];
+    if (building) {
+      baselineKwh = building.total_energy || campusBaselineKwh * 0.02;
+      focusLabel = `Building focus: ${building.building_name}`;
     }
   } else {
-    timeImpact = Math.sin((hour - 8) / 24 * Math.PI * 2) * 200;
+    const totalBuildings = data.summary?.total_buildings || 279;
+    focusLabel = `Campus-wide baseline (${totalBuildings} buildings)`;
   }
-  
-  const totalPrediction = Math.max(1500, baseLoad + weatherImpact + timeImpact);
-  
-  // Update display
-  document.getElementById('sim-result').textContent = formatNumber(totalPrediction);
-  document.getElementById('sim-base').textContent = `${formatNumber(baseLoad)} kWh`;
-  document.getElementById('sim-weather').textContent = `${weatherImpact >= 0 ? '+' : ''}${formatNumber(weatherImpact)} kWh`;
-  document.getElementById('sim-time').textContent = `${timeImpact >= 0 ? '+' : ''}${formatNumber(timeImpact)} kWh`;
-  
-  // Update gauge
-  const gaugePercent = Math.min(100, Math.max(0, (totalPrediction - 1500) / 4500 * 100));
-  document.getElementById('sim-gauge-fill').style.width = `${gaugePercent}%`;
+
+  const savingsKwh = baselineKwh * totalPct;
+  const costSavings = savingsKwh * 0.12;
+  const co2Savings = savingsKwh * 0.0004;
+  const peakBaseKw = 12000 * (baselineKwh / campusBaselineKwh);
+  const peakReductionPct = totalPct * simulatorAssumptions.peakReductionFactor;
+  const peakReductionKw = peakBaseKw * peakReductionPct;
+
+  const scheduleKwh = baselineKwh * schedulePct;
+  const mlKwh = baselineKwh * mlPct;
+
+  const campusSavingsKwh = campusBaselineKwh * totalPct;
+  const campusCostSavings = campusSavingsKwh * 0.12;
+  const campusCo2Savings = campusSavingsKwh * 0.0004;
+
+  if (scenarioBadge) scenarioBadge.textContent = getScenarioLabel(scheduleVal, mlVal);
+
+  const scheduleValEl = document.getElementById('sim-schedule-val');
+  const mlValEl = document.getElementById('sim-ml-val');
+  const mlCoverageEl = document.getElementById('sim-ml-coverage');
+  if (scheduleValEl) scheduleValEl.textContent = `${scheduleVal}%`;
+  if (mlValEl) mlValEl.textContent = `${mlVal}%`;
+  if (mlCoverageEl) mlCoverageEl.textContent = `${mlVal}%`;
+
+  const savingsKwhEl = document.getElementById('sim-savings-kwh');
+  const savingsDollarEl = document.getElementById('sim-savings-dollar');
+  const savingsCo2El = document.getElementById('sim-savings-co2');
+  const peakReductionEl = document.getElementById('sim-peak-reduction');
+  const peakKwEl = document.getElementById('sim-peak-kw');
+  const focusLabelEl = document.getElementById('sim-focus-label');
+
+  if (savingsKwhEl) savingsKwhEl.textContent = formatNumber(savingsKwh);
+  if (savingsDollarEl) savingsDollarEl.textContent = formatCurrency(costSavings);
+  if (savingsCo2El) savingsCo2El.textContent = `${formatNumber(co2Savings)} tons`;
+  if (peakReductionEl) peakReductionEl.textContent = formatPercent(peakReductionPct);
+  if (peakKwEl) peakKwEl.textContent = `${formatNumber(peakReductionKw)} kW`;
+  if (focusLabelEl) focusLabelEl.textContent = focusLabel;
+
+  const breakdownScheduleEl = document.getElementById('sim-breakdown-schedule');
+  const breakdownMlEl = document.getElementById('sim-breakdown-ml');
+  const breakdownTotalEl = document.getElementById('sim-breakdown-total');
+  const breakdownBarEl = document.getElementById('sim-breakdown-bar');
+
+  if (breakdownScheduleEl) breakdownScheduleEl.textContent = `${formatPercent(schedulePct)} (${formatNumber(scheduleKwh)} kWh)`;
+  if (breakdownMlEl) breakdownMlEl.textContent = `${formatPercent(mlPct)} (${formatNumber(mlKwh)} kWh)`;
+  if (breakdownTotalEl) breakdownTotalEl.textContent = `${formatPercent(totalPct)} (${formatNumber(savingsKwh)} kWh)`;
+  if (breakdownBarEl) breakdownBarEl.style.width = `${Math.min(100, (totalPct / 0.25) * 100)}%`;
+
+  const recoSavingsEl = document.getElementById('reco-total-savings');
+  const recoReductionEl = document.getElementById('reco-total-reduction');
+  const recoCo2El = document.getElementById('reco-total-co2');
+  if (recoSavingsEl) recoSavingsEl.textContent = formatCurrency(campusCostSavings);
+  if (recoReductionEl) recoReductionEl.textContent = formatPercent(totalPct);
+  if (recoCo2El) recoCo2El.textContent = formatNumber(campusCo2Savings);
+
+  const heroSavingsEl = document.getElementById('hero-savings');
+  if (heroSavingsEl) heroSavingsEl.textContent = formatCurrency(campusCostSavings);
+
+  updateInsights(peakReductionPct);
+
+  const { labels, baseline } = getMonthlyBaseline(data);
+  const baselineSum = baseline.reduce((acc, value) => acc + value, 0);
+  const baselineScale = baselineSum > 0 ? campusBaselineKwh / baselineSum : 1;
+  const scaledBaseline = baseline.map(value => value * baselineScale);
+  const focusBaseline = scaledBaseline.map(value => value * (baselineKwh / campusBaselineKwh));
+  const optimized = focusBaseline.map(value => value * (1 - totalPct));
+  updateSimulatorChart(labels, focusBaseline, optimized);
 }
 
-function formatHour(hour) {
-  if (hour === 0) return '12am';
-  if (hour === 12) return '12pm';
-  return hour < 12 ? `${hour}am` : `${hour - 12}pm`;
+function applySimulatorPreset(presetName) {
+  const preset = simulatorPresets[presetName];
+  if (!preset) return;
+
+  const scheduleSlider = document.getElementById('sim-schedule');
+  const mlSlider = document.getElementById('sim-ml');
+  if (scheduleSlider) scheduleSlider.value = preset.schedule;
+  if (mlSlider) mlSlider.value = preset.ml;
+}
+
+function getScenarioLabel(scheduleVal, mlVal) {
+  const match = Object.entries(simulatorPresets).find(([, preset]) => (
+    preset.schedule === scheduleVal && preset.ml === mlVal
+  ));
+  if (!match) return 'Custom scenario';
+  const name = match[0];
+  return `${name.charAt(0).toUpperCase()}${name.slice(1)} scenario`;
+}
+
+function getSimulationData() {
+  return dashboardData || getSampleData();
+}
+
+function populateSimulatorFocusOptions(force = false) {
+  const select = document.getElementById('sim-focus');
+  if (!select) return;
+  if (select.dataset.ready && !force) return;
+
+  const data = getSimulationData();
+  const totalBuildings = data.summary?.total_buildings || 279;
+  const topBuildings = data.buildings?.top_consumers || generateTopBuildings();
+  simulatorFocusBuildings = topBuildings.slice(0, 6);
+
+  let html = `<option value="campus">Campus-wide (${totalBuildings} buildings)</option>`;
+  html += simulatorFocusBuildings
+    .map((b, i) => `<option value="building-${i}">${b.building_name}</option>`)
+    .join('');
+
+  select.innerHTML = html;
+  select.dataset.ready = 'true';
+
+  const scheduleTargets = topBuildings.slice(0, 3).map(b => b.building_name);
+  const scheduleTargetEl = document.getElementById('sim-schedule-buildings');
+  if (scheduleTargetEl) scheduleTargetEl.textContent = scheduleTargets.join(', ');
+}
+
+function renderSimulatorPriorityBuildings() {
+  const container = document.getElementById('sim-building-list');
+  if (!container) return;
+
+  const cards = getPilotCandidates();
+  container.innerHTML = cards.map(card => `
+    <div class="sim-building-card">
+      <div class="sim-building-name">${card.name}</div>
+      <div class="sim-building-meta">${card.meta}</div>
+    </div>
+  `).join('');
+}
+
+function renderRecommendationTargets() {
+  const scheduleContainer = document.getElementById('reco-schedule-buildings');
+  const mlContainer = document.getElementById('reco-ml-buildings');
+  if (!scheduleContainer && !mlContainer) return;
+
+  const data = getSimulationData();
+  const topBuildings = data.buildings?.top_consumers || generateTopBuildings();
+  const retrofitBuildings = data.buildings?.retrofit_candidates || generateRetrofitBuildings();
+
+  if (scheduleContainer) {
+    const scheduleTargets = [
+      ...retrofitBuildings.slice(0, 3).map(b => b.building_name),
+      ...topBuildings.slice(0, 2).map(b => b.building_name)
+    ];
+    scheduleContainer.innerHTML = scheduleTargets.map(name => `<span class="reco-pill">${name}</span>`).join('');
+  }
+
+  if (mlContainer) {
+    const mlTargets = topBuildings.slice(0, 4).map(b => b.building_name);
+    mlContainer.innerHTML = mlTargets.map(name => `<span class="reco-pill">${name}</span>`).join('');
+  }
+}
+
+function getPilotCandidates() {
+  const data = getSimulationData();
+  const topBuildings = data.buildings?.top_consumers || generateTopBuildings();
+  const retrofitBuildings = data.buildings?.retrofit_candidates || generateRetrofitBuildings();
+
+  return [
+    ...topBuildings.slice(0, 2).map(b => ({
+      name: b.building_name,
+      meta: `High demand - ${formatNumber((b.total_energy || 0) / 1000000)} GWh/yr`
+    })),
+    ...retrofitBuildings.slice(0, 2).map(b => ({
+      name: b.building_name,
+      meta: `Legacy building - EUI ${(b.mean_eui || 0).toFixed(1)}`
+    }))
+  ];
+}
+
+function updateInsights(peakReductionOverride = null) {
+  const scheduleRangeEl = document.getElementById('insight-schedule-range');
+  const mlRangeEl = document.getElementById('insight-ml-range');
+  const peakReductionEl = document.getElementById('insight-peak-reduction');
+  const pilotCountEl = document.getElementById('insight-pilot-count');
+
+  if (scheduleRangeEl) {
+    scheduleRangeEl.textContent = formatPercentRange(
+      simulatorAssumptions.scheduleMinPct,
+      simulatorAssumptions.scheduleMaxPct
+    );
+  }
+
+  if (mlRangeEl) {
+    mlRangeEl.textContent = formatPercentRange(
+      simulatorAssumptions.mlMinPct,
+      simulatorAssumptions.mlMaxPct
+    );
+  }
+
+  if (peakReductionEl) {
+    const reductionPct = peakReductionOverride ?? (simulatorAssumptions.scheduleMaxPct + simulatorAssumptions.mlMaxPct) * simulatorAssumptions.peakReductionFactor;
+    peakReductionEl.textContent = formatPercent(reductionPct);
+  }
+
+  if (pilotCountEl) {
+    const pilots = getPilotCandidates();
+    pilotCountEl.textContent = `Top ${pilots.length}`;
+  }
+}
+
+function updateOverviewStats() {
+  const data = getSimulationData();
+  const summary = data.summary || {};
+
+  const heroTotalEl = document.getElementById('hero-total');
+  const heroBuildingsEl = document.getElementById('hero-buildings');
+  const overviewDateEl = document.getElementById('overview-date');
+
+  const totalGwh = normalizeTotalGwh(summary.total_electricity_mwh);
+  if (heroTotalEl && totalGwh !== null) {
+    heroTotalEl.textContent = totalGwh.toFixed(1);
+  }
+
+  if (heroBuildingsEl && summary.total_buildings) {
+    heroBuildingsEl.textContent = summary.total_buildings;
+  }
+
+  if (overviewDateEl && summary.date_range) {
+    overviewDateEl.textContent = summary.date_range;
+  }
+}
+
+function getMonthlyBaseline(data) {
+  const monthly = data.campus_overview?.monthly_trends || generateMonthlyTrends();
+  const totals = {};
+
+  monthly.forEach(entry => {
+    const month = entry.month;
+    const value = entry.energy_mwh || entry.total_mwh || 0;
+    totals[month] = (totals[month] || 0) + value;
+  });
+
+  const labels = Object.keys(totals).sort();
+  const baseline = labels.map(month => totals[month] * 1000);
+  return { labels, baseline };
+}
+
+function updateSimulatorChart(labels, baseline, optimized) {
+  const ctx = document.getElementById('sim-forecast-chart')?.getContext('2d');
+  if (!ctx) return;
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Baseline',
+        data: baseline,
+        borderColor: 'rgba(255, 107, 53, 0.9)',
+        backgroundColor: 'rgba(255, 107, 53, 0.15)',
+        fill: true,
+        tension: 0.3,
+        borderWidth: 2,
+        pointRadius: 0
+      },
+      {
+        label: 'Optimized',
+        data: optimized,
+        borderColor: 'rgba(0, 255, 136, 0.9)',
+        backgroundColor: 'rgba(0, 255, 136, 0.12)',
+        fill: true,
+        tension: 0.3,
+        borderWidth: 2,
+        pointRadius: 0
+      }
+    ]
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(17, 24, 32, 0.95)',
+        borderColor: 'rgba(0, 212, 255, 0.3)',
+        borderWidth: 1,
+        titleColor: '#00d4ff',
+        bodyColor: '#f0f4f8',
+        callbacks: {
+          label: (context) => `${context.dataset.label}: ${formatNumber(context.parsed.y)} kWh`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: '#8899a6', font: { size: 10 } }
+      },
+      y: {
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: {
+          color: '#8899a6',
+          font: { size: 10 },
+          callback: (value) => formatNumber(value)
+        }
+      }
+    }
+  };
+
+  if (!simulatorChart) {
+    simulatorChart = new Chart(ctx, { type: 'line', data, options });
+  } else {
+    simulatorChart.data = data;
+    simulatorChart.options = options;
+    simulatorChart.update();
+  }
 }
 
 // ============================================================
@@ -1187,6 +1491,34 @@ function formatNumber(num) {
   if (Math.abs(num) >= 1000000) return (num / 1000000).toFixed(1) + 'M';
   if (Math.abs(num) >= 1000) return (num / 1000).toFixed(1) + 'K';
   return num.toFixed(0);
+}
+
+function formatCurrency(num) {
+  if (num === null || num === undefined || isNaN(num)) return '--';
+  return `$${formatNumber(num)}`;
+}
+
+function formatPercent(decimal) {
+  if (decimal === null || decimal === undefined || isNaN(decimal)) return '--';
+  return `${(decimal * 100).toFixed(1)}%`;
+}
+
+function formatPercentRange(min, max) {
+  if (
+    min === null || min === undefined || isNaN(min) ||
+    max === null || max === undefined || isNaN(max)
+  ) {
+    return '--';
+  }
+  return `${(min * 100).toFixed(0)}-${(max * 100).toFixed(0)}%`;
+}
+
+function normalizeTotalGwh(rawValue) {
+  if (rawValue === null || rawValue === undefined || isNaN(rawValue)) return null;
+  if (rawValue > 1000000) {
+    return rawValue / 1000000;
+  }
+  return rawValue / 1000;
 }
 
 function getChartOptions(yLabel, xLabel = null) {
