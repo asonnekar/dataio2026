@@ -442,7 +442,7 @@ function initMonthlyChart() {
         pointBorderWidth: 2
       }]
     },
-    options: getChartOptions('MWh')
+    options: getChartOptions('Energy (MWh)', 'Month')
   });
 }
 
@@ -561,9 +561,9 @@ function initHourlyChart() {
       }]
     },
     options: {
-      ...getChartOptions('kWh'),
+      ...getChartOptions('Average Energy (kWh)', 'Hour of Day'),
       plugins: {
-        ...getChartOptions('kWh').plugins,
+        ...getChartOptions('Average Energy (kWh)', 'Hour of Day').plugins,
         tooltip: {
           backgroundColor: 'rgba(17, 24, 32, 0.95)',
           bodyColor: '#f0f4f8',
@@ -637,7 +637,7 @@ function initEUIChart() {
       }]
     },
     options: {
-      ...getChartOptions('kWh/sqft'),
+      ...getChartOptions('EUI (kWh/sqft/yr)', 'Building'),
       indexAxis: 'y'
     }
   });
@@ -784,21 +784,25 @@ function getHeatmapColor(normalized) {
   // Use power scale to emphasize high values (red zones)
   const emphasizedValue = Math.pow(normalized, 0.5); // Square root makes high values more prominent
 
-  // Blue (low) → Cyan → Yellow → Orange → Red (high)
-  if (emphasizedValue < 0.25) {
-    // Dark blue to cyan (low usage)
-    return `hsl(200, 100%, ${15 + emphasizedValue * 60}%)`;
-  } else if (emphasizedValue < 0.5) {
-    // Cyan to yellow-green (moderate usage)
-    const local = (emphasizedValue - 0.25) / 0.25;
+  // Blue (low) → Cyan → Green → Yellow → Orange → Red (high)
+  if (emphasizedValue < 0.2) {
+    // Dark blue to cyan (very low usage)
+    return `hsl(200, 100%, ${15 + emphasizedValue * 100}%)`;
+  } else if (emphasizedValue < 0.4) {
+    // Cyan to green (low to moderate usage)
+    const local = (emphasizedValue - 0.2) / 0.2;
     return `hsl(${200 - local * 80}, 100%, 50%)`;
-  } else if (emphasizedValue < 0.75) {
+  } else if (emphasizedValue < 0.6) {
+    // Green to yellow (moderate usage)
+    const local = (emphasizedValue - 0.4) / 0.2;
+    return `hsl(${120 - local * 60}, 100%, 50%)`;
+  } else if (emphasizedValue < 0.8) {
     // Yellow to orange (high usage)
-    const local = (emphasizedValue - 0.5) / 0.25;
-    return `hsl(${120 - local * 90}, 100%, 55%)`;
+    const local = (emphasizedValue - 0.6) / 0.2;
+    return `hsl(${60 - local * 30}, 100%, 55%)`;
   } else {
     // Orange to red (peak usage - RED ZONES)
-    const local = (emphasizedValue - 0.75) / 0.25;
+    const local = (emphasizedValue - 0.8) / 0.2;
     return `hsl(${30 - local * 30}, 100%, ${55 + local * 5}%)`;
   }
 }
@@ -991,7 +995,7 @@ function formatNumber(num) {
   return num.toFixed(0);
 }
 
-function getChartOptions(yLabel) {
+function getChartOptions(yLabel, xLabel = null) {
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -1009,14 +1013,26 @@ function getChartOptions(yLabel) {
     scales: {
       x: {
         grid: { color: 'rgba(255,255,255,0.05)' },
-        ticks: { color: '#8899a6', font: { family: 'Space Mono', size: 10 } }
+        ticks: { color: '#8899a6', font: { family: 'Space Mono', size: 10 } },
+        title: xLabel ? {
+          display: true,
+          text: xLabel,
+          color: '#8899a6',
+          font: { family: 'Space Mono', size: 11 }
+        } : { display: false }
       },
       y: {
         grid: { color: 'rgba(255,255,255,0.05)' },
-        ticks: { 
-          color: '#8899a6', 
+        ticks: {
+          color: '#8899a6',
           font: { family: 'Space Mono', size: 10 },
           callback: v => formatNumber(v)
+        },
+        title: {
+          display: true,
+          text: yLabel,
+          color: '#8899a6',
+          font: { family: 'Space Mono', size: 11 }
         }
       }
     }
