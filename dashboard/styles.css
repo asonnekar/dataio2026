@@ -209,7 +209,9 @@ body::before {
 }
 
 .section.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
 }
 
 @keyframes fadeIn {
@@ -228,7 +230,6 @@ body::before {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: var(--space-lg);
     padding-bottom: var(--space-md);
     border-bottom: 1px solid var(--border-subtle);
 }
@@ -269,7 +270,6 @@ body::before {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--space-md);
-    margin-bottom: var(--space-lg);
 }
 
 .hero-stat {
@@ -323,7 +323,6 @@ body::before {
 .card-grid {
     display: grid;
     gap: var(--space-md);
-    margin-bottom: var(--space-lg);
 }
 
 .card-grid.cols-2 {
@@ -547,7 +546,6 @@ body::before {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-md);
-    margin-bottom: var(--space-lg);
 }
 
 .insight-card {
@@ -810,7 +808,6 @@ body::before {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: var(--space-lg);
-    margin-bottom: var(--space-lg);
 }
 
 .sim-impact-card {
@@ -1145,6 +1142,10 @@ body::before {
 }
 
 /* ===== FEATURE BARS ===== */
+.feature-card {
+    margin-top: 0;
+}
+
 .feature-bars {
     display: flex;
     flex-direction: column;
@@ -1191,7 +1192,6 @@ body::before {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-lg);
-    margin-bottom: var(--space-lg);
 }
 
 .reco-focus-card {
@@ -1303,7 +1303,6 @@ body::before {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: var(--space-lg);
-    margin-bottom: var(--space-lg);
 }
 
 .timeline {
