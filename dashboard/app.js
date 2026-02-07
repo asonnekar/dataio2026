@@ -243,8 +243,8 @@ function generateHeatmapData() {
 // CHARTS INITIALIZATION
 // ============================================================
 
-function initializeAllCharts() {
-  initMap();
+async function initializeAllCharts() {
+  await initMap(); // Wait for map to load building data
   initUtilityPieChart();
   initMonthlyChart();
   initHeatmap();
@@ -397,6 +397,8 @@ async function initMap() {
   try {
     const response = await fetch('building_markers.json');
     buildingData = await response.json();
+    // Cache building data globally for other charts
+    window.buildingDataCache = buildingData;
   } catch (error) {
     console.error('Could not load building data:', error);
     return;
@@ -754,10 +756,20 @@ function initEUIChart() {
   // Try to get real building data
   if (window.buildingDataCache && window.buildingDataCache.buildings) {
     euiValues = window.buildingDataCache.buildings.map(b => b.eui);
+    console.log('EUI Chart: Using real building data from', euiValues.length, 'buildings');
   } else {
-    // Fallback to sample data if building data not loaded yet
-    const buildings = dashboardData.buildings?.top_consumers || generateTopBuildings();
-    euiValues = buildings.map(b => b.mean_eui || 25);
+    // Generate realistic sample data if building data not loaded yet
+    console.warn('EUI Chart: Building data not loaded, using sample data');
+    euiValues = Array.from({ length: 100 }, () => {
+      // Generate realistic distribution
+      const rand = Math.random();
+      if (rand < 0.3) return Math.random() * 2.5; // 30% very efficient
+      if (rand < 0.5) return 2.5 + Math.random() * 2.5; // 20% efficient
+      if (rand < 0.7) return 5 + Math.random() * 2.5; // 20% good
+      if (rand < 0.85) return 7.5 + Math.random() * 2.5; // 15% moderate
+      if (rand < 0.95) return 10 + Math.random() * 5; // 10% high
+      return 15 + Math.random() * 10; // 5% very high
+    });
   }
 
   // Create EUI distribution bins
